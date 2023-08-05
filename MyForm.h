@@ -5211,6 +5211,45 @@ namespace ToolBox {
 			Savee();
 		}
 	}
+
+    		   //Negative Buttons
+	private: System::Void Negative_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->button10->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(165)), static_cast<System::Int32>(static_cast<System::Byte>(49)),
+			static_cast<System::Int32>(static_cast<System::Byte>(65)));;
+		this->button10->Font = (gcnew System::Drawing::Font(L"Tahoma", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->button10->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(165)), static_cast<System::Int32>(static_cast<System::Byte>(49)),
+			static_cast<System::Int32>(static_cast<System::Byte>(65)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			showSave();
+			hideUnwanted();
+			for (int i = 0; i < src.rows; i++)
+			{
+				for (int j = 0; j < src.cols; j++)
+				{
+					src.at<uchar>(i, j) = 255 - src.at<uchar>(i, j);
+				}
+			}
+			imwrite("x.jpg", src);
+			pictureBox1->ImageLocation = "x.jpg";
+			ofd->FileName = pictureBox1->ImageLocation;
+			showSave();
+		}
+	}
     
     }
 }
