@@ -6913,6 +6913,43 @@ namespace ToolBox {
 		}
 	}
 
+    		   //Under Image Reset & Save & ARGB2Gray
+	private: System::Void Reset3_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->Reset3->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(40)), static_cast<System::Int32>(static_cast<System::Byte>(154)),
+			static_cast<System::Int32>(static_cast<System::Byte>(174)));;
+		this->Reset3->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->Reset3->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(40)), static_cast<System::Int32>(static_cast<System::Byte>(154)),
+			static_cast<System::Int32>(static_cast<System::Byte>(174)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else
+		{
+			hideUnwanted();
+			src = imread(x);
+			imwrite("x.jpg", src);
+			pictureBox1->ImageLocation = "x.jpg";
+			ofd->FileName = pictureBox1->ImageLocation;
+			hideSave();
+		}
+		int n = 0;
+		textBox1->Text = System::Convert::ToString(n);
+		textBox2->Text = System::Convert::ToString(n);
+		textBox3->Text = System::Convert::ToString(n);
+		textBox4->Text = System::Convert::ToString(n);
+		textBox5->Text = System::Convert::ToString(n);
+		textBox6->Text = System::Convert::ToString(n);
+		textBox7->Text = System::Convert::ToString(n);
+		textBox8->Text = System::Convert::ToString(n);
+	}
+    
 
     }
 }
