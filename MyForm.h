@@ -32,7 +32,10 @@ namespace ToolBox {
 	using namespace std;
 	using namespace cv;
 
-
+    Mat src;
+	Mat blind;
+	string x, x1, op;
+	bool histVisualize = false;
 
 
 
@@ -4409,6 +4412,8 @@ namespace ToolBox {
         os = chars;
         Marshal::FreeHGlobal(IntPtr((void*)chars));
     }
+
+
 #pragma endregion
 
     
