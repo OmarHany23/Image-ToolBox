@@ -6642,6 +6642,123 @@ namespace ToolBox {
 		pictureBox1->ImageLocation = "x.jpg";
 		ofd->FileName = pictureBox1->ImageLocation;
 	}
+
+    		   //DFT High Pass Filter
+	private: System::Void Fourier2_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->Fourier2->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(150)), static_cast<System::Int32>(static_cast<System::Byte>(10)),
+			static_cast<System::Int32>(static_cast<System::Byte>(48)));;
+		this->Fourier2->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->Fourier2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(150)), static_cast<System::Int32>(static_cast<System::Byte>(10)),
+			static_cast<System::Int32>(static_cast<System::Byte>(48)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			hideUnwanted();
+			this->saveFFS->Visible = true;
+			this->ffs->Visible = true;
+			this->LPF->Visible = true;
+		}
+	}
+	private: System::Void ffs_Scroll(System::Object^ sender, System::EventArgs^ e) {
+		ffs->Minimum = 1;
+		ffs->Maximum = 200;
+
+
+		//expanding image to optimal size
+		int m = getOptimalDFTSize(src.rows);
+		int n = getOptimalDFTSize(src.cols);
+		Mat padded;
+		copyMakeBorder(src, padded, 0, m - src.rows, 0, n - src.cols, 0, Scalar(0));
+
+		//converting image into floating and normalizing it in range of 0:1
+		padded.convertTo(padded, CV_32FC1, 1.0 / 255.0);
+
+		//making places for both complex and real values
+		Mat planes[2] = { padded,Mat::zeros(padded.size(),CV_32FC1) };
+		Mat complexI;
+		merge(planes, 2, complexI);
+
+		//applying dft
+		dft(complexI, complexI);
+
+		//split(complexI, planes);
+
+		//rearranging frequencies
+		int cx = complexI.cols / 2;
+		int cy = complexI.rows / 2;
+		Mat p1(complexI, cv::Rect(0, 0, cx, cy));
+		Mat p2(complexI, cv::Rect(cx, 0, cx, cy));
+		Mat p3(complexI, cv::Rect(0, cy, cx, cy));
+		Mat p4(complexI, cv::Rect(cx, cy, cx, cy));
+		Mat temp;
+		p1.copyTo(temp);
+		p4.copyTo(p1);
+		temp.copyTo(p4);
+		p2.copyTo(temp);
+		p3.copyTo(p2);
+		temp.copyTo(p3);
+		//split(complexI, planes);
+
+		//filter function
+		Mat Lfilter(complexI.size(), CV_32FC1);
+		d0 = ffs->Value;
+		for (int i = 0; i < Lfilter.rows; i++)
+			for (int j = 0; j < Lfilter.cols; j++)
+			{
+
+				double z1 = i - Lfilter.rows / 2;
+				double z2 = j - Lfilter.cols / 2;
+				if (sqrt(pow(z1, 2) + pow(z2, 2)) > d0)
+					Lfilter.at<float>(i, j) = 1;
+				else
+					Lfilter.at<float>(i, j) = 0;
+			}
+
+		//applying filter function
+		split(complexI, planes);
+		Mat outR, outI;
+		multiply(planes[0], Lfilter, outR);
+		multiply(planes[1], Lfilter, outI);
+		Mat out_planes[2] = { outR,outI };
+		Mat out_complexI;
+		merge(out_planes, 2, out_complexI);
+
+		//applying idft
+		idft(out_complexI, out_complexI);
+
+		//calculating mag. and normalize image in range of 0:1
+		split(out_complexI, planes);
+		Mat out;
+		magnitude(planes[0], planes[1], out);
+		normalize(out, out, 1, 255, NORM_MINMAX);
+
+		/*namedWindow(" ",0);
+		imshow(" ",out);
+		waitKey(0);*/
+
+		blind = out;
+		imwrite("filter.jpg", blind);
+		pictureBox1->ImageLocation = "filter.jpg";
+	}
+	private: System::Void saveFFS_Click(System::Object^ sender, System::EventArgs^ e) {
+		ffs->Value = 1;
+		src = blind.clone();
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+	}
     
     }
 }
