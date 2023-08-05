@@ -6455,5 +6455,76 @@ namespace ToolBox {
 		src = blind.clone();
 	}
 
+    		   //Sobel Edge Detection
+	private: System::Void SobelEdges_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->SobelEdges->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(72)), static_cast<System::Int32>(static_cast<System::Byte>(89)),
+			static_cast<System::Int32>(static_cast<System::Byte>(120)));;
+		this->SobelEdges->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->SobelEdges->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(72)), static_cast<System::Int32>(static_cast<System::Byte>(89)),
+			static_cast<System::Int32>(static_cast<System::Byte>(120)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			hideUnwanted();
+			this->Sobel->Visible = true;
+		}
+	}
+	private: System::Void Sobel_Click(System::Object^ sender, System::EventArgs^ e) {
+		this->SaveSobel->Visible = true;
+		this->labelH->Visible = true;
+		this->labelV->Visible = true;
+		this->labelD->Visible = true;
+		this->BoxD->Visible = true;
+		this->BoxV->Visible = true;
+		this->BoxH->Visible = true;
+
+
+		Mat  filter_h, filter_d, filter_v, filter;
+
+		Mat kernel_h = (Mat_<int>(3, 3) << -1, -2, -1, 0, 0, 0, 1, 2, 1);
+		filter2D(src, filter_h, CV_8UC1, kernel_h);
+
+		imwrite("filter_h.jpg", filter_h);
+		BoxH->ImageLocation = "filter_h.jpg";
+
+		Mat kernel_v = (Mat_<int>(3, 3) << -1, 0, 1, -2, 0, 2, -1, 0, 1);
+		filter2D(src, filter_v, CV_8UC1, kernel_v);
+
+
+
+		imwrite("filter_v.jpg", filter_v);
+		BoxV->ImageLocation = "filter_v.jpg";
+
+		Mat kernel_d = (Mat_<int>(3, 3) << 2, 1, 0, 1, 0, -1, 0, -1, -2);
+		filter2D(src, filter_d, CV_8UC1, kernel_d);
+
+		imwrite("filter_d.jpg", filter_d);
+		BoxD->ImageLocation = "filter_d.jpg";
+
+		addWeighted(filter_v, 1, filter_h, 1, 0, filter);
+		addWeighted(filter, 1, filter_d, 1, 0, filter);
+
+		imwrite("filter.jpg", filter);
+		pictureBox1->ImageLocation = "filter.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+		blind = filter.clone();
+	}
+	private: System::Void SaveSobel_Click(System::Object^ sender, System::EventArgs^ e) {
+		src = blind.clone();
+	}
+    
     }
 }
