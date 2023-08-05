@@ -6414,5 +6414,46 @@ namespace ToolBox {
 		laplacianScroll->Value = 1;
 	}
 
+    		   //Thresholding using thresh fn
+	private: System::Void ThreshEdge_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->button15->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(218)), static_cast<System::Int32>(static_cast<System::Byte>(219)),
+			static_cast<System::Int32>(static_cast<System::Byte>(97)));;
+		this->button15->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->button15->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(218)), static_cast<System::Int32>(static_cast<System::Byte>(219)),
+			static_cast<System::Int32>(static_cast<System::Byte>(97)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			hideUnwanted();
+			this->ThreshhHold->Visible = true;
+			this->threshS->Visible = true;
+			this->cnfrmThresholding->Visible = true;
+		}
+	}
+	private: System::Void threshS_Scroll(System::Object^ sender, System::EventArgs^ e) {
+		threshS->Minimum = 1;
+		threshS->Maximum = 255;
+		blind = src.clone();
+		threshold(src, blind, threshS->Value, 255, THRESH_BINARY);
+		imwrite("plane.jpg", blind);
+		pictureBox1->ImageLocation = "plane.jpg";
+	}
+	private: System::Void cnfrmThresholding_Click(System::Object^ sender, System::EventArgs^ e) {
+		src = blind.clone();
+	}
+
     }
 }
