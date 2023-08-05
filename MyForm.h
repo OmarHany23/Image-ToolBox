@@ -5717,6 +5717,52 @@ namespace ToolBox {
 	private: System::Void SavePlane_Click(System::Object^ sender, System::EventArgs^ e) {
 		src = blind.clone();
 	}
+
+    		   //Thresholding
+	private: System::Void threshHolding_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->button17->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(146)), static_cast<System::Int32>(static_cast<System::Byte>(7)),
+			static_cast<System::Int32>(static_cast<System::Byte>(229)));;
+		this->button17->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->button17->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(3)), static_cast<System::Int32>(static_cast<System::Byte>(3)),
+			static_cast<System::Int32>(static_cast<System::Byte>(3)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(146)), static_cast<System::Int32>(static_cast<System::Byte>(7)),
+			static_cast<System::Int32>(static_cast<System::Byte>(229)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			hideUnwanted();
+			this->threshBox->Visible = true;
+			this->threshHoldingCnfrm->Visible = true;
+			this->threshHoldingS->Visible = true;
+			this->ThreshLabel->Visible = true;
+		}
+	}
+	private: System::Void threshHoldingS_Scroll(System::Object^ sender, System::EventArgs^ e) {
+		threshHoldingS->Minimum = 1;
+		threshHoldingS->Maximum = 255;
+		threshBox->Text = System::Convert::ToString(threshHoldingS->Value);
+
+		blind = src.clone();
+		threshold(src, blind, threshHoldingS->Value, 255, THRESH_BINARY);
+		imwrite("plane.jpg", blind);
+		pictureBox1->ImageLocation = "plane.jpg";
+	}
+	private: System::Void threshHoldingCnfrm_Click(System::Object^ sender, System::EventArgs^ e) {
+		src = blind.clone();
+		threshBox->Text = System::Convert::ToString(0);
+		threshHoldingS->Value = 1;
+	}
     
     }
 }
