@@ -6145,6 +6145,51 @@ namespace ToolBox {
 		src = blind;
 		MedianScroll->Value = 3;
 	}
+
+    		   //Gaussian Filter
+	private: System::Void gaussianFilter_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->gaussianFilter->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(115)), static_cast<System::Int32>(static_cast<System::Byte>(50)),
+			static_cast<System::Int32>(static_cast<System::Byte>(56)));;
+		this->gaussianFilter->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->gaussianFilter->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(115)), static_cast<System::Int32>(static_cast<System::Byte>(50)),
+			static_cast<System::Int32>(static_cast<System::Byte>(56)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			hideUnwanted();
+			this->label16->Visible = true;
+			this->gaussianFilterS->Visible = true;
+			this->cnfrmGaussSave->Visible = true;
+		}
+	}
+	private: System::Void gaussianFilterS_Scroll(System::Object^ sender, System::EventArgs^ e) {
+		gaussianFilterS->Maximum = 15;
+		gaussianFilterS->Minimum = 3;
+		blind = src.clone();
+		if (gaussianFilterS->Value % 2 != 0)
+		{
+			GaussianBlur(blind, blind, cv::Size(gaussianFilterS->Value, gaussianFilterS->Value), 0);
+			imwrite("filter.jpg", blind);
+			pictureBox1->ImageLocation = "filter.jpg";
+		}
+	}
+	private: System::Void cnfrmGaussSave_Click(System::Object^ sender, System::EventArgs^ e) {
+		gaussianFilterS->Value = 3;
+		src = blind;
+	}
     
     }
 }
