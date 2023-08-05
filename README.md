@@ -51,4 +51,10 @@ void main(array<String^>^ args) {
 
 ### Now just copy MyForm.h file in this repo and paste it in your own project
 ### it will be found in your project files
-### Run the Project through visual studio
+
+### To access the GUI head towards MyForm.h[Design]
+![mainScreen](/documentation/images/guiDescription/mainScreen.png)
+
+## After Running the Project
+### Main Tab
+![mainTab](/documentation/images/guiDescription/mainTab.png)
