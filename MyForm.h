@@ -37,6 +37,18 @@ namespace ToolBox {
 	string x, x1, op;
 	bool histVisualize = false;
 
+    //region of interest
+        //Mat image;
+        //cv::Point origin;
+        //Rect selection;
+        //bool selectObject = false;
+        //bool objectCropped = false;
+        System::Drawing::Rectangle Rect;
+        System::Drawing::Rectangle Rect1;
+        cv::Rect rect1;
+        System::Drawing::Point LocationXY;			 //starting point
+        System::Drawing::Point Locationx1y1;			//ending point
+        bool isMouseDown = false;		//mouse down event
 
 
 
@@ -4413,6 +4425,64 @@ namespace ToolBox {
         Marshal::FreeHGlobal(IntPtr((void*)chars));
     }
 
+    		//region of interest 
+
+		System::Drawing::Rectangle GetRect() {
+
+			Rect = System::Drawing::Rectangle(); //creating new Rectangle object
+
+			Rect.X = min(LocationXY.X, Locationx1y1.X);//value of x must be between starting point and current point
+
+			Rect.Y = min(LocationXY.Y, Locationx1y1.Y);//value of y must be between starting point and current point
+
+			Rect.Width = (LocationXY.X - Locationx1y1.X);
+
+			Rect.Height = (LocationXY.Y - Locationx1y1.Y);
+
+			return Rect;
+
+
+		}
+
+		//roi
+		/*static void onMouse(int event, int x, int y, int flags, void*)
+		{
+			if (selectObject)
+			{
+				selection.x = min(x, origin.x);
+				selection.y = min(y, origin.y);
+				selection.width = abs(x - origin.x);
+				selection.height = abs(y - origin.y);
+
+				selection &= Rect(0, 0, src.cols, src.rows);
+			}
+			switch (event)
+			{
+			case EVENT_LBUTTONDOWN:
+				origin = cv::Point(x, y);
+				selection = Rect(x, y, 0, 0);
+				selectObject = true;
+				break;
+
+			case EVENT_LBUTTONUP:
+				selectObject = false;
+				if (selection.width > 0 && selection.height > 0)
+				{
+					objectCropped = true;
+				}
+
+
+			default:
+				break;
+			}
+
+			src.copyTo(image);
+			rectangle(image, selection, Scalar(255, 0, 0), 3, 8, 0);
+			imshow("image", image);
+
+
+		}*/
+        
 
 #pragma endregion
     	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
@@ -4990,6 +5060,106 @@ namespace ToolBox {
 		pictureBox1->Width -= zoomlevel;
 		pictureBox1->Height -= zoomlevel;
 		showSave();
+	}
+
+    private: System::Void Crop_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->button3->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(50)), static_cast<System::Int32>(static_cast<System::Byte>(111)),
+			static_cast<System::Int32>(static_cast<System::Byte>(198)));;
+		this->button3->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->button3->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(50)), static_cast<System::Int32>(static_cast<System::Byte>(111)),
+			static_cast<System::Int32>(static_cast<System::Byte>(198)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else
+		{
+			////crop main code
+			//namedWindow("image", 0);
+			//setMouseCallback("image",onMouse);
+			//imshow("image", src);
+			//Mat crop;
+			//int d = 1;
+			//while (d == 1)
+			//{
+			//	if (objectCropped)
+			//	{
+			//		crop = src(selection);
+
+			//		d = 0;
+			//	}
+			//	waitKey(10);
+			//}
+			//crop.copyTo(src);
+
+			hideUnwanted();
+			this->pictureBox2->Visible = true;
+			this->ConfCrop->Visible = true;
+			this->label14->Visible = true;
+			pictureBox2->ImageLocation = "x.jpg";
+
+		}
+	}
+
+		   //Region of interest (Detecting mouse selection area) for croping function
+
+	private: System::Void pictureBox2_MouseDown(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		isMouseDown = true;  //in event occurance this var is true
+		LocationXY = e->Location; //getting the starting point of x and y
+	}
+	private: System::Void pictureBox2_MouseMove(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		if (isMouseDown == true)    //this block will be excuted only when mouse down event is occuring
+		{
+			Locationx1y1 = e->Location; // Get the current point of x & y
+			Refresh();
+		}
+	}
+	private: System::Void pictureBox2_MouseUp(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		if (isMouseDown == true)    //this block will be excuted only when mouse down event is occuring
+		{
+			Locationx1y1 = e->Location; // Get the ending point of x & y
+
+			isMouseDown = false;
+		}
+	}
+	private: System::Void pictureBox2_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
+		// Create pen.
+		Pen^ bluePen = gcnew Pen(Color::Blue, 3.0f);
+
+
+		// Draw rectangle to screen.
+		e->Graphics->DrawRectangle(bluePen, GetRect());//GetRect() is a function
+	}
+
+	private: System::Void ConfCrop_Click(System::Object^ sender, System::EventArgs^ e) {
+		pictureBox2->ImageLocation = "x.jpg";
+
+		rect1.x = 0;
+		rect1.y = 0;
+		rect1.width = 0;
+		rect1.height = 0;
+
+		rect1.x = min(LocationXY.X, Locationx1y1.X);
+		rect1.y = min(LocationXY.Y, Locationx1y1.Y);
+		rect1.width = abs(LocationXY.X - Locationx1y1.X);
+		rect1.height = abs(LocationXY.Y - Locationx1y1.Y);
+		rect1 &= cv::Rect(0, 0, src.cols, src.rows);
+		//rect1 = cv::Rect(e->Location.X, e->Location.Y, 0, 0);
+
+		Mat crop = src(rect1);
+		src = crop;
+
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+		showSave();
+
 	}
 
     }
