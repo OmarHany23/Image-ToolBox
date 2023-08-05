@@ -4483,6 +4483,32 @@ namespace ToolBox {
 
 		}*/
 
+        		//adding noises
+		void Add_salt_pepper_Noise(Mat& srcArr, float pa, float pb)
+
+		{
+			RNG rng;
+			int amount1 = srcArr.rows * srcArr.cols * pa;
+			int amount2 = srcArr.rows * srcArr.cols * pb;
+			for (int counter = 0; counter < amount1; ++counter)
+			{
+				srcArr.at<uchar>(rng.uniform(0, srcArr.rows), rng.uniform(0, srcArr.cols)) = 0;
+
+			}
+			for (int counter = 0; counter < amount2; ++counter)
+			{
+				srcArr.at<uchar>(rng.uniform(0, srcArr.rows), rng.uniform(0, srcArr.cols)) = 255;
+			}
+		}
+		void Add_gaussian_Noise(Mat& srcArr, double mean, double sigma)
+		{
+			Mat NoiseArr = srcArr.clone();
+			RNG rng;
+			rng.fill(NoiseArr, RNG::NORMAL, mean, sigma);
+
+			add(srcArr, NoiseArr, srcArr);
+		}
+        
 
 #pragma endregion
     	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
@@ -6339,6 +6365,6 @@ namespace ToolBox {
 		pictureBox1->ImageLocation = "x.jpg";
 		ofd->FileName = pictureBox1->ImageLocation;
 	}
-    
+
     }
 }
