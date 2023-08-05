@@ -5283,6 +5283,62 @@ namespace ToolBox {
 			showSave();
 		}
 	}
-    
+
+    		   //Histogram Visualization Buttons
+	private: System::Void ShowHist_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->button8->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(74)), static_cast<System::Int32>(static_cast<System::Byte>(48)),
+			static_cast<System::Int32>(static_cast<System::Byte>(165)));;
+		this->button8->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->button8->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(74)), static_cast<System::Int32>(static_cast<System::Byte>(48)),
+			static_cast<System::Int32>(static_cast<System::Byte>(165)));;
+
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			this->pictureBox3->Visible = true;
+			histVisualize = true;
+			float hist[256] = { 0 };
+			int max = 0;
+			for (int g = 0; g < 256; g++)
+			{
+				for (int r = 0; r < src.rows; r++)
+					for (int c = 0; c < src.cols; c++)
+					{
+						if (src.at<uchar>(r, c) == g)
+						{
+							hist[g] = hist[g] + 1;
+						}
+						if (hist[g] > max)
+						{
+							max = hist[g];
+						}
+					}
+			}
+			////////////////visualizing histogram//////////////////////////
+			Mat hist_img(max, 510, CV_8UC1, Scalar(0));
+			for (int s = 0; s < 256; s++)
+			{
+				float bin_val = hist[s];
+				line(hist_img, cv::Point(s * 2 + 2, max), cv::Point(s * 2 + 2, max - bin_val), Scalar(255), 1);
+			}
+			imwrite("j.jpg", hist_img);
+			pictureBox3->ImageLocation = "j.jpg";
+		}
+	}
+
+
     }
 }
