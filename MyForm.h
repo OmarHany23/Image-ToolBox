@@ -5250,6 +5250,39 @@ namespace ToolBox {
 			showSave();
 		}
 	}
+
+    		   //Histogram Equalization Buttons
+	private: System::Void HistEqualize_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->button9->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(40)), static_cast<System::Int32>(static_cast<System::Byte>(154)),
+			static_cast<System::Int32>(static_cast<System::Byte>(174)));;
+		this->button9->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->button9->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(40)), static_cast<System::Int32>(static_cast<System::Byte>(154)),
+			static_cast<System::Int32>(static_cast<System::Byte>(174)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			showSave();
+			hideUnwanted();
+			equalizeHist(src, src);
+			imwrite("x.jpg", src);
+			pictureBox1->ImageLocation = "x.jpg";
+			ofd->FileName = pictureBox1->ImageLocation;
+			showSave();
+		}
+	}
     
     }
 }
