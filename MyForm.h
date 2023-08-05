@@ -6949,6 +6949,28 @@ namespace ToolBox {
 		textBox7->Text = System::Convert::ToString(n);
 		textBox8->Text = System::Convert::ToString(n);
 	}
+
+    	private: System::Void Save3_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->Save3->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(74)), static_cast<System::Int32>(static_cast<System::Byte>(48)),
+			static_cast<System::Int32>(static_cast<System::Byte>(165)));;
+		this->Save3->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->Save3->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(74)), static_cast<System::Int32>(static_cast<System::Byte>(48)),
+			static_cast<System::Int32>(static_cast<System::Byte>(165)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else {
+			hideUnwanted();
+			Savee();
+		}
+	}
     
 
     }
