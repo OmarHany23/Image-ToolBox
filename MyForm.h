@@ -5456,6 +5456,32 @@ namespace ToolBox {
 			this->bightLabel->Visible = true;
 		}
 	}
+
+    	private: System::Void powerTrans_Scroll(System::Object^ sender, System::EventArgs^ e) {
+
+		powerTrans->Minimum = 1;
+		powerTrans->Maximum = 20;
+		powerBox->Text = System::Convert::ToString(powerTrans->Value);
+
+		Mat dst(src.size(), CV_32FC1);
+		for (int i = 0; i < dst.rows; i++)
+		{
+			for (int j = 0; j < dst.cols; j++)
+			{
+				dst.at<float>(i, j) = powf(src.at<uchar>(i, j), powerTrans->Value * 0.1);
+			}
+		}
+		normalize(dst, dst, 0, 255, NORM_MINMAX);
+		convertScaleAbs(dst, dst);
+		imwrite("x.jpg", dst);
+		pictureBox1->ImageLocation = "x.jpg";
+		blind = dst;
+	}
+	private: System::Void cnfrmPowerTrans_Click(System::Object^ sender, System::EventArgs^ e) {
+		src = blind;
+		powerTrans->Value = 10;
+		powerBox->Text = System::Convert::ToString(0);
+	}
     
     }
 }
