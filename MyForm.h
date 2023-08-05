@@ -5988,6 +5988,72 @@ namespace ToolBox {
 		src = blind;
 		trackBar2->Value = 3;
 	}
+
+    		   //Circular Filter
+	private: System::Void CircularFilter_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->button12->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(181)), static_cast<System::Int32>(static_cast<System::Byte>(32)),
+			static_cast<System::Int32>(static_cast<System::Byte>(35)));;
+		this->button12->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->button12->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(181)), static_cast<System::Int32>(static_cast<System::Byte>(32)),
+			static_cast<System::Int32>(static_cast<System::Byte>(35)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			hideUnwanted();
+			this->label16->Visible = true;
+			this->circularS->Visible = true;
+			this->cnfrmCircular->Visible = true;
+		}
+	}
+	private: System::Void circularS_Scroll(System::Object^ sender, System::EventArgs^ e) {
+		blind = src.clone();
+
+		circularS->Maximum = 15;
+		circularS->Minimum = 3;
+
+		Mat filter;
+
+		int count = 0;
+
+		Mat Kernel = (Mat_<float>(circularS->Value, circularS->Value));
+		for (int i = 0; i < circularS->Value; i++) {
+			for (int j = 0; j < circularS->Value; j++) {
+				if (((i == 0) && (j == 0)) || ((i == 0) && (j == circularS->Value - 1)) || ((i == circularS->Value - 1) && (j == 0)) || ((i == circularS->Value - 1) && (j == circularS->Value - 1))) {
+					Kernel.at<float>(i, j) = 0;
+					count += Kernel.at<float>(i, j);
+				}
+				else {
+					Kernel.at<float>(i, j) = 1;
+					count += Kernel.at<float>(i, j);
+				}
+				//cout << Kernel.at<float>(i, j) << "\t";
+			}
+			//cout << "\n";
+		}
+		Kernel /= count;
+		filter2D(src, filter, CV_8UC1, Kernel);
+
+		imwrite("filter.jpg", filter);
+		pictureBox1->ImageLocation = "filter.jpg";
+		blind = filter;
+	}
+	private: System::Void cnfrmCircular_Click(System::Object^ sender, System::EventArgs^ e) {
+		src = blind;
+		circularS->Value = 3;
+	}
     
     }
 }
