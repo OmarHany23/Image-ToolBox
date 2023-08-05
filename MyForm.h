@@ -5425,6 +5425,37 @@ namespace ToolBox {
 			}
 		}
 	}
+
+    		   //Gamma Correction Buttons
+	private: System::Void powerTransformation_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->powerTransformation->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(12)), static_cast<System::Int32>(static_cast<System::Byte>(20)),
+			static_cast<System::Int32>(static_cast<System::Byte>(36)));;
+		this->powerTransformation->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 12.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->powerTransformation->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), static_cast<System::Int32>(static_cast<System::Byte>(233)),
+			static_cast<System::Int32>(static_cast<System::Byte>(233)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(12)), static_cast<System::Int32>(static_cast<System::Byte>(20)),
+			static_cast<System::Int32>(static_cast<System::Byte>(36)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			hideUnwanted();
+			this->powerBox->Visible = true;
+			this->powerTrans->Visible = true;
+			this->cnfrmPowerTrans->Visible = true;
+			this->bightLabel->Visible = true;
+		}
+	}
     
     }
 }
