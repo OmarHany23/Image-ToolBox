@@ -5763,6 +5763,99 @@ namespace ToolBox {
 		threshBox->Text = System::Convert::ToString(0);
 		threshHoldingS->Value = 1;
 	}
-    
+
+    		   //Gray Level Slicing
+	private: System::Void grayLevelSlicing_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->grayLevelSlicing->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(212)), static_cast<System::Int32>(static_cast<System::Byte>(134)),
+			static_cast<System::Int32>(static_cast<System::Byte>(37)));;
+		this->grayLevelSlicing->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->grayLevelSlicing->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(212)), static_cast<System::Int32>(static_cast<System::Byte>(134)),
+			static_cast<System::Int32>(static_cast<System::Byte>(37)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			hideUnwanted();
+			this->minRange->Visible = true;
+			this->maxRange->Visible = true;
+			this->labelMin->Visible = true;
+			this->labelMax->Visible = true;
+			this->MinValue->Visible = true;
+			this->MaxVlaue->Visible = true;
+			this->HighlightGray->Visible = true;
+			this->secHighlightGray->Visible = true;
+			this->saveGrayRange->Visible = true;
+			this->label18->Visible = true;
+			this->label17->Visible = true;
+		}
+
+	}
+	private: System::Void MinValue_Scroll(System::Object^ sender, System::EventArgs^ e) {
+		MinValue->Minimum = 0;
+		MinValue->Maximum = MaxVlaue->Value;
+		minRange->Text = System::Convert::ToString(MinValue->Value);
+	}
+	private: System::Void MaxVlaue_Scroll(System::Object^ sender, System::EventArgs^ e) {
+		MaxVlaue->Minimum = MinValue->Value;
+		MaxVlaue->Maximum = 255;
+		maxRange->Text = System::Convert::ToString(MaxVlaue->Value);
+	}
+	private: System::Void HighlightGray_Click(System::Object^ sender, System::EventArgs^ e) {
+		blind = src.clone();
+		for (int i = 0; i < src.rows; i++)
+		{
+			for (int j = 0; j < src.cols; j++)
+			{
+				if (blind.at<uchar>(i, j) > MinValue->Value && blind.at<uchar>(i, j) < MaxVlaue->Value)
+				{
+					blind.at<uchar>(i, j) = 255;
+				}
+				else
+				{
+					blind.at<uchar>(i, j) = blind.at<uchar>(i, j);
+				}
+			}
+		}
+		imwrite("plane.jpg", blind);
+		pictureBox1->ImageLocation = "plane.jpg";
+	}
+	private: System::Void secHighlightGray_Click(System::Object^ sender, System::EventArgs^ e) {
+		blind = src.clone();
+		for (int i = 0; i < src.rows; i++)
+		{
+			for (int j = 0; j < src.cols; j++)
+			{
+				if (blind.at<uchar>(i, j) > MinValue->Value && blind.at<uchar>(i, j) < MaxVlaue->Value)
+				{
+					blind.at<uchar>(i, j) = 255;
+				}
+				else
+				{
+					blind.at<uchar>(i, j) = 0;
+				}
+			}
+		}
+		imwrite("plane.jpg", blind);
+		pictureBox1->ImageLocation = "plane.jpg";
+	}
+	private: System::Void saveGrayRange_Click(System::Object^ sender, System::EventArgs^ e) {
+		src = blind.clone();
+		MaxVlaue->Value = 255;
+		MinValue->Value = 0;
+	}
+
+
     }
 }
