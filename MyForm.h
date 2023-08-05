@@ -6845,5 +6845,36 @@ namespace ToolBox {
 		}
 	}
 
+    		   //Adding Salt & Pepper Noise
+	private: System::Void saltAndPepper_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->saltAndPepper->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(100)), static_cast<System::Int32>(static_cast<System::Byte>(111)),
+			static_cast<System::Int32>(static_cast<System::Byte>(198)));;
+		this->saltAndPepper->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->saltAndPepper->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(100)), static_cast<System::Int32>(static_cast<System::Byte>(111)),
+			static_cast<System::Int32>(static_cast<System::Byte>(198)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			Add_salt_pepper_Noise(src, 0.2, 0.2);
+
+			imwrite("noise.jpg", src);
+			pictureBox1->ImageLocation = "noise.jpg";
+			ofd->FileName = pictureBox1->ImageLocation;
+		}
+	}
+    
     }
 }
