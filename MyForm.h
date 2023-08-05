@@ -4237,18 +4237,28 @@ namespace ToolBox {
 
 		}
 
-        //Save Function
-		void Savee() {
-			sfd->Filter = "Bitmap Image (.bmp)|*.bmp|Gif Image (.gif)|*.gif |JPEG Image (.jpeg)|*.jpeg |Png Image (.png)|*.png |Tiff Image (.tiff)|*.tiff |Wmf Image (.wmf)|*.wmf";
-			sfd->InitialDirectory = "C:\\";
-			sfd->FileName = "deafult";
-			sfd->RestoreDirectory = true;
-			if (sfd->ShowDialog() == System::Windows::Forms::DialogResult::OK)
-			{
-				pictureBox1->Image->Save(sfd->FileName, System::Drawing::Imaging::ImageFormat::Jpeg);
-			}
-		}
-
+    //Save Function
+    void Savee() {
+        sfd->Filter = "Bitmap Image (.bmp)|*.bmp|Gif Image (.gif)|*.gif |JPEG Image (.jpeg)|*.jpeg |Png Image (.png)|*.png |Tiff Image (.tiff)|*.tiff |Wmf Image (.wmf)|*.wmf";
+        sfd->InitialDirectory = "C:\\";
+        sfd->FileName = "deafult";
+        sfd->RestoreDirectory = true;
+        if (sfd->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+        {
+            pictureBox1->Image->Save(sfd->FileName, System::Drawing::Imaging::ImageFormat::Jpeg);
+        }
+    }
+    //Hide & Show Save Button Functions
+            void hideSave() {
+                this->Save2->Visible = false;
+                this->SaveImg->Visible = false;
+                this->Save3->Visible = false;
+            }
+            void showSave() {
+                this->Save2->Visible = true;
+                this->SaveImg->Visible = true;
+                this->Save3->Visible = true;
+            }
 #pragma endregion
 
     
