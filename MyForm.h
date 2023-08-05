@@ -5538,6 +5538,185 @@ namespace ToolBox {
 		logBox->Text = System::Convert::ToString(0);
 	}
 
+    		   //Bit Plane Slicing
+	private: System::Void BitPlane_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->button7->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(118)), static_cast<System::Int32>(static_cast<System::Byte>(35)),
+			static_cast<System::Int32>(static_cast<System::Byte>(47)));;
+		this->button7->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->button7->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(118)), static_cast<System::Int32>(static_cast<System::Byte>(35)),
+			static_cast<System::Int32>(static_cast<System::Byte>(47)));;
 
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			hideUnwanted();
+			this->PlaneLabel->Visible = true;
+			this->BitPlaneBox->Visible = true;
+			this->SelectedBitLabel->Visible = true;
+			this->ChoosenPlane->Visible = true;
+			this->cnfrmBitPlaneSelection->Visible = true;
+			this->SavePlane->Visible = true;
+		}
+	}
+	private: System::Void BitPlaneBox_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+		ChoosenPlane->Text = BitPlaneBox->Text;
+	}
+	private: System::Void cnfrmBitPlaneSelection_Click(System::Object^ sender, System::EventArgs^ e) {
+		blind = src.clone();
+		if (BitPlaneBox->Text == "First Plane")
+		{
+			for (int i = 0; i < blind.rows; i++)
+			{
+				for (int j = 0; j < blind.cols; j++)
+				{
+					if (blind.at<uchar>(i, j) & 1)
+					{
+						blind.at<uchar>(i, j) = 255;
+					}
+					else
+					{
+						blind.at<uchar>(i, j) = 0;
+					}
+				}
+			}
+		}
+		else if (BitPlaneBox->Text == "Second Plane")
+		{
+			for (int i = 0; i < blind.rows; i++)
+			{
+				for (int j = 0; j < blind.cols; j++)
+				{
+					if (blind.at<uchar>(i, j) & 2)
+					{
+						blind.at<uchar>(i, j) = 255;
+					}
+					else
+					{
+						blind.at<uchar>(i, j) = 0;
+					}
+				}
+			}
+		}
+		else if (BitPlaneBox->Text == "Third Plane")
+		{
+			for (int i = 0; i < blind.rows; i++)
+			{
+				for (int j = 0; j < blind.cols; j++)
+				{
+					if (blind.at<uchar>(i, j) & 4)
+					{
+						blind.at<uchar>(i, j) = 255;
+					}
+					else
+					{
+						blind.at<uchar>(i, j) = 0;
+					}
+				}
+			}
+		}
+		else if (BitPlaneBox->Text == "Fourth Plane")
+		{
+			for (int i = 0; i < blind.rows; i++)
+			{
+				for (int j = 0; j < blind.cols; j++)
+				{
+					if (blind.at<uchar>(i, j) & 8)
+					{
+						blind.at<uchar>(i, j) = 255;
+					}
+					else
+					{
+						blind.at<uchar>(i, j) = 0;
+					}
+				}
+			}
+		}
+		else if (BitPlaneBox->Text == "Fifth Plane")
+		{
+			for (int i = 0; i < blind.rows; i++)
+			{
+				for (int j = 0; j < src.cols; j++)
+				{
+					if (blind.at<uchar>(i, j) & 16)
+					{
+						blind.at<uchar>(i, j) = 255;
+					}
+					else
+					{
+						blind.at<uchar>(i, j) = 0;
+					}
+				}
+			}
+		}
+		else if (BitPlaneBox->Text == "Sixth Plane")
+		{
+			for (int i = 0; i < blind.rows; i++)
+			{
+				for (int j = 0; j < blind.cols; j++)
+				{
+					if (blind.at<uchar>(i, j) & 32)
+					{
+						blind.at<uchar>(i, j) = 255;
+					}
+					else
+					{
+						blind.at<uchar>(i, j) = 0;
+					}
+				}
+			}
+		}
+		else if (BitPlaneBox->Text == "Seventh Plane")
+		{
+			for (int i = 0; i < blind.rows; i++)
+			{
+				for (int j = 0; j < blind.cols; j++)
+				{
+					if (blind.at<uchar>(i, j) & 64)
+					{
+						blind.at<uchar>(i, j) = 255;
+					}
+					else
+					{
+						blind.at<uchar>(i, j) = 0;
+					}
+				}
+			}
+		}
+		else
+		{
+			for (int i = 0; i < blind.rows; i++)
+			{
+				for (int j = 0; j < blind.cols; j++)
+				{
+					if (blind.at<uchar>(i, j) & 128)
+					{
+						blind.at<uchar>(i, j) = 255;
+					}
+					else
+					{
+						blind.at<uchar>(i, j) = 0;
+					}
+				}
+			}
+		}
+		imwrite("plane.jpg", blind);
+		pictureBox1->ImageLocation = "plane.jpg";
+	}
+	private: System::Void SavePlane_Click(System::Object^ sender, System::EventArgs^ e) {
+		src = blind.clone();
+	}
+    
     }
 }
