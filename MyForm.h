@@ -50,6 +50,13 @@ namespace ToolBox {
         System::Drawing::Point Locationx1y1;			//ending point
         bool isMouseDown = false;		//mouse down event
 
+    //shape Recogination
+	    Mat imgGray, imgBlur, imgCanny, imgDil, imgErode;
+
+	//dft filter
+	//Mat FI;
+	    int d0 = 100;
+
 
 
 	public ref class MyForm : public System::Windows::Forms::Form
@@ -4509,7 +4516,50 @@ namespace ToolBox {
 			add(srcArr, NoiseArr, srcArr);
 		}
 
+        		//Get Contour Custoom Function
+		void getContours(Mat imgDil, Mat src) {
 
+			vector<vector<cv::Point>> contours;
+			vector<Vec4i> hierarchy;
+
+			findContours(imgDil, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+			//drawContours(img, contours, -1, Scalar(255, 0, 255), 2);
+
+			vector<vector<cv::Point>> conPoly(contours.size());
+			vector<cv::Rect> boundRect(contours.size());
+
+			for (int i = 0; i < contours.size(); i++)
+			{
+				int area = contourArea(contours[i]);
+				cout << area << endl;
+				string objectType;
+
+				if (area > 1000)
+				{
+					float peri = arcLength(contours[i], true);
+					approxPolyDP(contours[i], conPoly[i], 0.02 * peri, true);
+					cout << conPoly[i].size() << endl;
+					boundRect[i] = boundingRect(conPoly[i]);
+
+					int objCor = (int)conPoly[i].size();
+
+					if (objCor == 3) { objectType = "Tri"; }
+					else if (objCor == 4)
+					{
+						float aspRatio = (float)boundRect[i].width / (float)boundRect[i].height;
+						cout << aspRatio << endl;
+						if (aspRatio > 0.95 && aspRatio < 1.05) { objectType = "Square"; }
+						else { objectType = "Rect"; }
+					}
+					else if (objCor > 4) { objectType = "Circle"; }
+
+					drawContours(src, conPoly, i, Scalar(255, 0, 255), 2);
+					rectangle(src, boundRect[i].tl(), boundRect[i].br(), Scalar(0, 255, 0), 5);
+					putText(src, objectType, { boundRect[i].x,boundRect[i].y - 5 }, FONT_HERSHEY_PLAIN, 1, Scalar(0, 69, 255), 2);
+				}
+			}
+		}
+    
 #pragma endregion
     	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
 	}
@@ -6759,6 +6809,41 @@ namespace ToolBox {
 		pictureBox1->ImageLocation = "x.jpg";
 		ofd->FileName = pictureBox1->ImageLocation;
 	}
-    
+
+    		   //Detecting Shapes
+	private: System::Void ShapeDetection_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->button18->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(74)), static_cast<System::Int32>(static_cast<System::Byte>(48)),
+			static_cast<System::Int32>(static_cast<System::Byte>(165)));;
+		this->button18->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->button18->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(74)), static_cast<System::Int32>(static_cast<System::Byte>(48)),
+			static_cast<System::Int32>(static_cast<System::Byte>(165)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else
+		{
+			blind = src.clone();
+			hideUnwanted();
+			this->Recog->Visible = true;
+			cvtColor(blind, imgGray, COLOR_BGR2GRAY);
+			GaussianBlur(imgGray, imgBlur, cv::Size(3, 3), 3, 0);
+			Canny(imgBlur, imgCanny, 25, 75);
+			Mat kernel = getStructuringElement(MORPH_RECT, cv::Size(3, 3));
+			dilate(imgCanny, imgDil, kernel);
+
+			getContours(imgDil, blind);
+
+			imwrite("x.jpg", blind);
+			Recog->ImageLocation = "x.jpg";
+		}
+	}
+
     }
 }
