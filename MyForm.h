@@ -4415,7 +4415,39 @@ namespace ToolBox {
 
 
 #pragma endregion
+    	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
+	}
 
+		   //Button That Loads the Image
+	private: System::Void LoadImg_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->LoadImg->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(165)), static_cast<System::Int32>(static_cast<System::Byte>(49)),
+			static_cast<System::Int32>(static_cast<System::Byte>(65)));;
+		this->LoadImg->Font = (gcnew System::Drawing::Font(L"Tahoma", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->LoadImg->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(165)), static_cast<System::Int32>(static_cast<System::Byte>(49)),
+			static_cast<System::Int32>(static_cast<System::Byte>(65)));;
+
+		//btn to Select the image that will be opened in the picture box
+		hideUnwanted();
+		if (ofd->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+		{
+			path = ofd->FileName;
+			MarshalString(path, x);
+			src = imread(x);
+			if (src.empty())
+			{
+				MessageBox::Show("Please enter an image");
+			}
+			imwrite("x.jpg", src);
+			pictureBox1->ImageLocation = "x.jpg";
+			ofd->FileName = pictureBox1->ImageLocation;
+			ofd->RestoreDirectory = true;
+		}
+	}
     
 
 
