@@ -6265,6 +6265,80 @@ namespace ToolBox {
 		pictureBox1->ImageLocation = "x.jpg";
 		ofd->FileName = pictureBox1->ImageLocation;
 	}
+
+    		   //Laplacian Filter
+	private: System::Void laplac_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->button6->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(23)), static_cast<System::Int32>(static_cast<System::Byte>(25)),
+			static_cast<System::Int32>(static_cast<System::Byte>(48)));;
+		this->button6->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->button6->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(23)), static_cast<System::Int32>(static_cast<System::Byte>(25)),
+			static_cast<System::Int32>(static_cast<System::Byte>(48)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			hideUnwanted();
+			this->fLabel->Visible = true;
+			this->laplacianFilters->Visible = true;
+			this->selectLabel->Visible = true;
+			this->SelectedLabel->Visible = true;
+			this->applyingLaplacian->Visible = true;
+			this->cnfrmLaplacian->Visible = true;
+
+		}
+
+	}
+	private: System::Void laplacianFilters_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+		SelectedLabel->Text = laplacianFilters->Text;
+	}
+	private: System::Void applyingLaplacian_Click(System::Object^ sender, System::EventArgs^ e) {
+		blind = src.clone();
+		if (laplacianFilters->Text == "Type 4 filter")
+		{
+			Mat kernal_L = (Mat_<float>(3, 3) << 0, -1, 0, -1, 4, -1, 0, -1, 0);
+			filter2D(blind, blind, CV_8UC1, kernal_L);
+		}
+		else if (laplacianFilters->Text == "Type 8 filter")
+		{
+			Mat kernal_L = (Mat_<float>(3, 3) << -1, -1, -1, -1, 8, -1, -1, -1, -1);
+			filter2D(blind, blind, CV_8UC1, kernal_L);
+		}
+		else if (laplacianFilters->Text == "Type -4 filter")
+		{
+			Mat kernal_L = (Mat_<float>(3, 3) << 0, 1, 0, 1, -4, 1, 0, 1, 0);
+			filter2D(blind, blind, CV_8UC1, kernal_L);
+		}
+		else if (laplacianFilters->Text == "Type -8 filter")
+		{
+			Mat kernal_L = (Mat_<float>(3, 3) << 1, 1, 1, 1, -8, 1, 1, 1, 1);
+			filter2D(blind, blind, CV_8UC1, kernal_L);
+		}
+		else
+		{
+			MessageBox::Show("Please Select a filter");
+		}
+		imwrite("filter.jpg", blind);
+		pictureBox1->ImageLocation = "filter.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+	}
+	private: System::Void cnfrmLaplacian_Click(System::Object^ sender, System::EventArgs^ e) {
+		src.copyTo(blind);
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+	}
     
     }
 }
