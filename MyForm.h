@@ -7003,6 +7003,21 @@ namespace ToolBox {
 		}
 	}
 
+    		   //Advanced Edits Guide
+	private: System::Void pointProcessingGuide_Click(System::Object^ sender, System::EventArgs^ e) {
+		MessageBox::Show("1) Histogram is a graph, which shows intensity distribution of an image.\n 2)adjust Contrast(Histogram Equalization):It is a method which applied to a dark or \n washed out images in order to improve image contrast by spreading out the frequencies of the image.\n 3)Linear transformation(image negative):Used for enhancing white or grey detail embedded in dark regions of an image.\n 4)Blinding two images together \n 5)Adjust Brightness(Power Transformation):Used to map a narrow range of \n dark input values into a wider range of output values or vice versa depending on y value \n 6)Brighten Dark Images(LogTransformation):Used to map a narrow range of dark input values into a wider range of output values \n 7)image Slicing Level(BitPlaneSlicing):The main goals of bit plane slicing is: \n Converting a gray level image to a binary image. \n Image Compression (Representing an image with fewer bits) \n 8)Choose a certain detail(Thresholding):allows only a certain values to be displayed \n 9)Highlight Gray Range(Gray Level Slicing):It�s a way to highlight gray range of interest to a viewer");
+	}
+
+		   //Filters Guide
+	private: System::Void FiltersGuide_Click(System::Object^ sender, System::EventArgs^ e) {
+		MessageBox::Show("1)traditional Fliter (Box Filter): low-pass filter that smooths the image by making each output pixel the average of the surrounding ones, removing details, noise and andedges from images \n 3)circular Filter(Remove high noise):removes high noises \n 5)Median Filter (extremely dark or bright values):removes salt and pepper noise \n 6)reducing high noises and blurring (gaussian filter):reducing noise (high frequency components) and blurring regions of an image. \n 7)Thick Sharpening (sobel filter): sharpen all edges's directions \n 8)Thin Sharpening (laplacian filter): sharpen edges with one symettrical direction  ");
+	}
+
+		   //Locate Objects & Boundaries Guide
+	private: System::Void segmentationGuide_Click(System::Object^ sender, System::EventArgs^ e) {
+
+		MessageBox::Show("1)Getting Thin edges : Laplacian Detector \n 2)detecting certain edges : threshold detector  \n 3)Detecting all Edges's Directions : sobel detector \n  4)Detecting the Main Object \n 5)Denying the Main Object   ");
+	}
 
     }
 }
