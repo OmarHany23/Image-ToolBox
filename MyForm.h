@@ -4848,5 +4848,92 @@ namespace ToolBox {
 		}
 	}
 
+    		   //Image Skewing Section
+	private: System::Void Skewing_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->button1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(218)), static_cast<System::Int32>(static_cast<System::Byte>(219)),
+			static_cast<System::Int32>(static_cast<System::Byte>(97)));;
+		this->button1->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->button1->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(218)), static_cast<System::Int32>(static_cast<System::Byte>(219)),
+			static_cast<System::Int32>(static_cast<System::Byte>(97)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else
+		{
+			hideUnwanted();
+			this->SkewUpRight->Visible = true;
+			this->SkewUpLeft->Visible = true;
+			this->SkewDownRight->Visible = true;
+			this->SkewDownLeft->Visible = true;
+		}
+	}
+	private: System::Void SkewUpRight_Click(System::Object^ sender, System::EventArgs^ e) {
+		Point2f ori[3], dest[3];
+		ori[0] = Point2f(0, src.rows - 1);
+		ori[1] = Point2f(src.rows - 1, src.cols - 1);
+		ori[2] = Point2f(src.cols - 6, 0);
+		dest[0] = Point2f(0, src.rows - 1);
+		dest[1] = Point2f(src.rows - 1, src.cols - 1);
+		dest[2] = Point2f(src.cols - 1, 0);
+		Mat SM = getAffineTransform(ori, dest);
+		warpAffine(src, src, SM, src.size());
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+		showSave();
+	}
+	private: System::Void SkewUpLeft_Click(System::Object^ sender, System::EventArgs^ e) {
+		Point2f ori[3], dest[3];
+		ori[0] = Point2f(0, src.rows - 1);
+		ori[1] = Point2f(src.rows - 1, src.cols - 1);
+		ori[2] = Point2f(5, 0);
+		dest[0] = Point2f(0, src.rows - 1);
+		dest[1] = Point2f(src.rows - 1, src.cols - 1);
+		dest[2] = Point2f(0, 0);
+		Mat SM = getAffineTransform(ori, dest);
+		warpAffine(src, src, SM, src.size());
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+		showSave();
+	}
+	private: System::Void SkewDownRight_Click(System::Object^ sender, System::EventArgs^ e) {
+		Point2f ori[3], dest[3];
+		ori[0] = Point2f(0, 0);
+		ori[1] = Point2f(src.cols - 1, 0);
+		ori[2] = Point2f(src.cols - 6, src.rows - 1);
+		dest[0] = Point2f(0, 0);
+		dest[1] = Point2f(src.cols - 1, 0);
+		dest[2] = Point2f(src.cols - 1, src.rows - 1);
+		Mat SM = getAffineTransform(ori, dest);
+		warpAffine(src, src, SM, src.size());
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+		showSave();
+	}
+	private: System::Void SkewDownLeft_Click(System::Object^ sender, System::EventArgs^ e) {
+		Point2f ori[3], dest[3];
+		ori[0] = Point2f(0, 0);
+		ori[1] = Point2f(src.cols - 1, 0);
+		ori[2] = Point2f(5, src.rows - 1);
+		dest[0] = Point2f(0, 0);
+		dest[1] = Point2f(src.cols - 1, 0);
+		dest[2] = Point2f(0, src.rows - 1);
+		Mat SM = getAffineTransform(ori, dest);
+		warpAffine(src, src, SM, src.size());
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+		showSave();
+	}
+    
     }
 }
