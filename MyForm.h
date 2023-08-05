@@ -6054,6 +6054,50 @@ namespace ToolBox {
 		src = blind;
 		circularS->Value = 3;
 	}
+
+    		   //Cone Filter
+	private: System::Void coneFilteR_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->button11->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(224)), static_cast<System::Int32>(static_cast<System::Byte>(160)),
+			static_cast<System::Int32>(static_cast<System::Byte>(80)));;
+		this->button11->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->button11->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(224)), static_cast<System::Int32>(static_cast<System::Byte>(160)),
+			static_cast<System::Int32>(static_cast<System::Byte>(80)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			hideUnwanted();
+			this->coneFilter->Visible = true;
+			this->cnfrmCone->Visible = true;
+		}
+	}
+	private: System::Void coneFilter_Click(System::Object^ sender, System::EventArgs^ e) {
+		blind = src.clone();
+
+		Mat filter;
+		Mat Kernel = (Mat_<float>(5, 5) << 0, 0, 1, 0, 0, 0, 2, 2, 2, 0, 1, 2, 5, 2, 1, 0, 2, 2, 2, 0, 0, 0, 1, 0, 0);
+		Kernel /= 25;
+		filter2D(src, filter, CV_8UC1, Kernel);
+
+		imwrite("filter.jpg", filter);
+		pictureBox1->ImageLocation = "filter.jpg";
+		blind = filter;
+	}
+	private: System::Void cnfrmCone_Click(System::Object^ sender, System::EventArgs^ e) {
+		src = blind;
+	}
     
     }
 }
