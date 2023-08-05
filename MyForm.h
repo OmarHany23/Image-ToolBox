@@ -5339,6 +5339,92 @@ namespace ToolBox {
 		}
 	}
 
+    		   //Two Images Blinding Buttons
+	private: System::Void waterMark_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->button2->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(52)), static_cast<System::Int32>(static_cast<System::Byte>(158)),
+			static_cast<System::Int32>(static_cast<System::Byte>(197)));;
+		this->button2->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->button2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(52)), static_cast<System::Int32>(static_cast<System::Byte>(158)),
+			static_cast<System::Int32>(static_cast<System::Byte>(197)));;
 
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			hideUnwanted();
+			this->selectImg->Visible = true;
+			this->Blind->Visible = true;
+			this->label15->Visible = true;
+			this->textBox9->Visible = true;
+			this->cnfrmBlind->Visible = true;
+
+		}
+	}
+	private: System::Void selectImg_Click(System::Object^ sender, System::EventArgs^ e) {
+
+		if (ofd2->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+		{
+			path1 = ofd2->FileName;
+			MarshalString(path1, x1);
+			blind = imread(x1, 0);
+		}
+	}
+	private: System::Void Blind_Click(System::Object^ sender, System::EventArgs^ e) {
+		resize(blind, blind, src.size());
+		for (int i = 0; i < src.rows; i++)
+		{
+			for (int j = 0; j < src.cols; j++)
+			{
+				src.at<uchar>(i, j) = src.at<uchar>(i, j) * 0.9 + blind.at<uchar>(i, j) * 0.1;
+			}
+		}
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+		showSave();
+	}
+	private: System::Void cnfrmBlind_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (blind.empty())
+		{
+			MessageBox::Show("Please Select an Image");
+		}
+		else
+		{
+			double a = System::Convert::ToDouble(textBox9->Text);
+			if (a < 0)
+			{
+				MessageBox::Show("Please enter a Valid Number");
+			}
+			else
+			{
+				a = a / 100;
+				double b = 1 - a;
+				resize(blind, blind, src.size());
+				for (int i = 0; i < src.rows; i++)
+				{
+					for (int j = 0; j < src.cols; j++)
+					{
+						src.at<uchar>(i, j) = src.at<uchar>(i, j) * b + blind.at<uchar>(i, j) * a;
+					}
+				}
+				imwrite("x.jpg", src);
+				pictureBox1->ImageLocation = "x.jpg";
+				ofd->FileName = pictureBox1->ImageLocation;
+				showSave();
+			}
+		}
+	}
+    
     }
 }
