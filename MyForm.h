@@ -5856,6 +5856,61 @@ namespace ToolBox {
 		MinValue->Value = 0;
 	}
 
+    		   //Traditional Filter
+	private: System::Void traditionalFilter_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->button14->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(84)), static_cast<System::Int32>(static_cast<System::Byte>(57)),
+			static_cast<System::Int32>(static_cast<System::Byte>(192)));;
+		this->button14->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->button14->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(84)), static_cast<System::Int32>(static_cast<System::Byte>(57)),
+			static_cast<System::Int32>(static_cast<System::Byte>(192)));;
 
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			hideUnwanted();
+			this->label16->Visible = true;
+			this->trackBar1->Visible = true;
+			this->cnfrmTraditional->Visible = true;
+		}
+	}
+	private: System::Void traditionalFilter_Scroll(System::Object^ sender, System::EventArgs^ e) {
+		blind = src.clone();
+		trackBar1->Maximum = 15;
+		trackBar1->Minimum = 3;
+
+		Mat  filter;
+		int count = 0;
+
+		Mat Kernel = (Mat_<float>(trackBar1->Value, trackBar1->Value));
+		for (int i = 0; i < trackBar1->Value; i++) {
+			for (int j = 0; j < trackBar1->Value; j++) {
+				count++;
+				Kernel.at<float>(i, j) = 1;
+			}
+		}
+		Kernel /= count;
+		filter2D(src, filter, CV_8UC1, Kernel);
+
+		imwrite("filter.jpg", filter);
+		pictureBox1->ImageLocation = "filter.jpg";
+		blind = filter;
+	}
+	private: System::Void cnfrmTraditional_Click(System::Object^ sender, System::EventArgs^ e) {
+		src = blind;
+		trackBar1->Value = 3;
+	}
+    
     }
 }
