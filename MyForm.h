@@ -4237,11 +4237,21 @@ namespace ToolBox {
 
 		}
 
-		
+        //Save Function
+		void Savee() {
+			sfd->Filter = "Bitmap Image (.bmp)|*.bmp|Gif Image (.gif)|*.gif |JPEG Image (.jpeg)|*.jpeg |Png Image (.png)|*.png |Tiff Image (.tiff)|*.tiff |Wmf Image (.wmf)|*.wmf";
+			sfd->InitialDirectory = "C:\\";
+			sfd->FileName = "deafult";
+			sfd->RestoreDirectory = true;
+			if (sfd->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+			{
+				pictureBox1->Image->Save(sfd->FileName, System::Drawing::Imaging::ImageFormat::Jpeg);
+			}
+		}
 
 #pragma endregion
 
-
+    
 
 
 
