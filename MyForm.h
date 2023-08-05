@@ -4738,6 +4738,54 @@ namespace ToolBox {
 			}
 		}
 	}
+
+    		   //Image Flip Section
+	private: System::Void Mirror_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->button5->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(159)), static_cast<System::Int32>(static_cast<System::Byte>(222)),
+			static_cast<System::Int32>(static_cast<System::Byte>(233)));;
+		this->button5->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->button5->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(159)), static_cast<System::Int32>(static_cast<System::Byte>(222)),
+			static_cast<System::Int32>(static_cast<System::Byte>(233)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else
+		{
+			hideUnwanted();
+			this->xmirror->Visible = true;
+			this->ymirror->Visible = true;
+			this->xymirror->Visible = true;
+		}
+	}
+	private: System::Void xmirror_Click(System::Object^ sender, System::EventArgs^ e) {
+		flip(src, src, 1);
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+		showSave();
+	}
+	private: System::Void ymirror_Click(System::Object^ sender, System::EventArgs^ e) {
+		flip(src, src, 0);
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+		showSave();
+	}
+	private: System::Void xymirror_Click(System::Object^ sender, System::EventArgs^ e) {
+		flip(src, src, -1);
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+		showSave();
+	}
+
     
     }
 }
