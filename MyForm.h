@@ -4508,7 +4508,7 @@ namespace ToolBox {
 
 			add(srcArr, NoiseArr, srcArr);
 		}
-        
+
 
 #pragma endregion
     	private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
@@ -6364,6 +6364,54 @@ namespace ToolBox {
 		imwrite("x.jpg", src);
 		pictureBox1->ImageLocation = "x.jpg";
 		ofd->FileName = pictureBox1->ImageLocation;
+	}
+
+    		   //Laplacian in Edge Detection
+	private: System::Void LaplacianDetection_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->LaplacianDetection->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(100)), static_cast<System::Int32>(static_cast<System::Byte>(111)),
+			static_cast<System::Int32>(static_cast<System::Byte>(198)));;
+		this->LaplacianDetection->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->LaplacianDetection->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(100)), static_cast<System::Int32>(static_cast<System::Byte>(111)),
+			static_cast<System::Int32>(static_cast<System::Byte>(198)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			hideUnwanted();
+			this->laplaceLabel->Visible = true;
+			this->laplacianScroll->Visible = true;
+			this->saveEdges->Visible = true;
+		}
+	}
+	private: System::Void laplacianScroll_Scroll(System::Object^ sender, System::EventArgs^ e) {
+		blind = src.clone();
+		laplacianScroll->Minimum = 1;
+		laplacianScroll->Maximum = 30;
+
+		if (laplacianScroll->Value % 2 != 0)
+		{
+			Laplacian(blind, blind, CV_8UC1, laplacianScroll->Value);
+
+			imwrite("filter.jpg", blind);
+			pictureBox1->ImageLocation = "filter.jpg";
+			ofd->FileName = pictureBox1->ImageLocation;
+		}
+	}
+	private: System::Void saveEdges_Click(System::Object^ sender, System::EventArgs^ e) {
+		src = blind.clone();
+		laplacianScroll->Value = 1;
 	}
 
     }
