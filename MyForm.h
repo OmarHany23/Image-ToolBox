@@ -6098,6 +6098,53 @@ namespace ToolBox {
 	private: System::Void cnfrmCone_Click(System::Object^ sender, System::EventArgs^ e) {
 		src = blind;
 	}
+
+    		   //Median Filter
+	private: System::Void MedianFilter_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->MedianFilter->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(40)), static_cast<System::Int32>(static_cast<System::Byte>(67)),
+			static_cast<System::Int32>(static_cast<System::Byte>(166)));;
+		this->MedianFilter->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->MedianFilter->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(40)), static_cast<System::Int32>(static_cast<System::Byte>(67)),
+			static_cast<System::Int32>(static_cast<System::Byte>(166)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			hideUnwanted();
+			this->label16->Visible = true;
+			this->MedianScroll->Visible = true;
+			this->cnfrmMedian->Visible = true;
+		}
+	}
+	private: System::Void MedianScroll_Scroll(System::Object^ sender, System::EventArgs^ e) {
+		blind = src.clone();
+
+		if (MedianScroll->Value % 2 != 0) {
+			MedianScroll->Maximum = 15;
+			MedianScroll->Minimum = 3;
+			Mat filter;
+			medianBlur(src, filter, MedianScroll->Value);
+			imwrite("filter.jpg", filter);
+			pictureBox1->ImageLocation = "filter.jpg";
+			blind = filter;
+		}
+	}
+	private: System::Void cnfrmMedian_Click(System::Object^ sender, System::EventArgs^ e) {
+		src = blind;
+		MedianScroll->Value = 3;
+	}
     
     }
 }
