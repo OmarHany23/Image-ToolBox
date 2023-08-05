@@ -4934,6 +4934,63 @@ namespace ToolBox {
 		ofd->FileName = pictureBox1->ImageLocation;
 		showSave();
 	}
-    
+
+    		   //Image Zooming Section
+	private: System::Void Zoom_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->Zoom->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(239)), static_cast<System::Int32>(static_cast<System::Byte>(196)),
+			static_cast<System::Int32>(static_cast<System::Byte>(204)));;
+		this->Zoom->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->Zoom->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(239)), static_cast<System::Int32>(static_cast<System::Byte>(196)),
+			static_cast<System::Int32>(static_cast<System::Byte>(204)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else
+		{
+			hideUnwanted();
+			this->ZoomIn->Visible = false;
+			this->ZoomOut->Visible = false;
+			this->ZoomIn->Visible = true;
+			this->ZoomOut->Visible = true;
+		}
+	}
+	private: System::Void ZoomIn_Click(System::Object^ sender, System::EventArgs^ e) {
+		/*
+		* Mat Z = src(Rect(0,0,src.cols/2,src.rows/2));
+		* resize(src,src,cv::Size(),2,2,0);
+		*/
+		/*Mat Z = getRotationMatrix2D(Point2f(src.cols / 2, src.rows / 2), 0, 1.2);
+		warpAffine(src, src, Z, src.size());
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;*/
+		int zoomlevel = 50;
+		pictureBox1->Top -= zoomlevel / 2;
+		pictureBox1->Left -= zoomlevel / 2;
+		pictureBox1->Width += zoomlevel;
+		pictureBox1->Height += zoomlevel;
+		showSave();
+	}
+	private: System::Void ZoomOut_Click(System::Object^ sender, System::EventArgs^ e) {
+		/*Mat Z = getRotationMatrix2D(Point2f(src.cols/2,src.rows/2),0,0.8);
+		warpAffine(src, src, Z, src.size());
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;*/
+		int zoomlevel = 50;
+		pictureBox1->Top += zoomlevel / 2;
+		pictureBox1->Left += zoomlevel / 2;
+		pictureBox1->Width -= zoomlevel;
+		pictureBox1->Height -= zoomlevel;
+		showSave();
+	}
+
     }
 }
