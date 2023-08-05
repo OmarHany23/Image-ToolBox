@@ -228,3 +228,15 @@ The sixth Tab is Noise (to add noise to the image)
 
 ### - Gaussian Noise: adds Gaussian Noise to the image
 ![gaussianNoise](/documentation/images/guiDescription/gaussianNoise.png)
+
+## Themes Selection
+There is three themes to Choose From
+
+### - Gray Theme
+![grayTheme](/documentation/images/guiDescription/grayTheme.png)
+
+### - Dark Theme
+![darkTheme](/documentation/images/guiDescription/darkTheme.png)
+
+### - White Theme (Default)
+![whiteTheme](/documentation/images/guiDescription/whiteTheme.png)
