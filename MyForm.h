@@ -5482,6 +5482,62 @@ namespace ToolBox {
 		powerTrans->Value = 10;
 		powerBox->Text = System::Convert::ToString(0);
 	}
-    
+
+    		   //LogTransformation Buttons
+	private: System::Void logTrans_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->logTrans->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(112)), static_cast<System::Int32>(static_cast<System::Byte>(120)),
+			static_cast<System::Int32>(static_cast<System::Byte>(137)));;
+		this->logTrans->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->logTrans->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(112)), static_cast<System::Int32>(static_cast<System::Byte>(120)),
+			static_cast<System::Int32>(static_cast<System::Byte>(137)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			hideUnwanted();
+			this->logBox->Visible = true;
+			this->cnfrmChanges->Visible = true;
+			this->logTransf->Visible = true;
+			this->logLabel->Visible = true;
+		}
+	}
+	private: System::Void logTransf_Scroll(System::Object^ sender, System::EventArgs^ e) {
+		logTransf->Minimum = 1;
+		logTransf->Maximum = 32;
+		logBox->Text = System::Convert::ToString(logTransf->Value);
+
+		Mat dst(src.size(), CV_32FC1);
+		for (int i = 0; i < dst.rows; i++)
+		{
+			for (int j = 0; j < dst.cols; j++)
+			{
+				dst.at<float>(i, j) = log(src.at<uchar>(i, j) + logTransf->Value);
+			}
+		}
+		normalize(dst, dst, 0, 255, NORM_MINMAX);
+		convertScaleAbs(dst, dst);
+		imwrite("x.jpg", dst);
+		pictureBox1->ImageLocation = "x.jpg";
+		blind = dst;
+	}
+	private: System::Void cnfrmChanges_Click(System::Object^ sender, System::EventArgs^ e) {
+		src = blind;
+		logTransf->Value = 32;
+		logBox->Text = System::Convert::ToString(0);
+	}
+
+
     }
 }
