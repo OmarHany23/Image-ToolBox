@@ -6875,6 +6875,44 @@ namespace ToolBox {
 			ofd->FileName = pictureBox1->ImageLocation;
 		}
 	}
-    
+
+    		   //Adding Gaussian Noise
+	private: System::Void GaussianNoise_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->GaussianNoise->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(100)), static_cast<System::Int32>(static_cast<System::Byte>(111)),
+			static_cast<System::Int32>(static_cast<System::Byte>(198)));;
+		this->GaussianNoise->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->GaussianNoise->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(100)), static_cast<System::Int32>(static_cast<System::Byte>(111)),
+			static_cast<System::Int32>(static_cast<System::Byte>(198)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+
+			/*Mat noise(img.size(), img.type());
+			float m = (10, 12, 34);
+			float sigma = (1, 5, 50);
+			randn(noise, m, sigma);
+			img += noise;*/
+			Add_gaussian_Noise(src, 15, 15);
+
+			imwrite("noise.jpg", src);
+			pictureBox1->ImageLocation = "noise.jpg";
+			ofd->FileName = pictureBox1->ImageLocation;
+		}
+	}
+
+
     }
 }
