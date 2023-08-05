@@ -4448,7 +4448,80 @@ namespace ToolBox {
 			ofd->RestoreDirectory = true;
 		}
 	}
-    
+    		   //Button That Shows the Image Details
+	private: System::Void ImageProberties_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->ImageProberties->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(47)), static_cast<System::Int32>(static_cast<System::Byte>(167)),
+			static_cast<System::Int32>(static_cast<System::Byte>(159)));;
+		this->ImageProberties->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->ImageProberties->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(47)), static_cast<System::Int32>(static_cast<System::Byte>(167)),
+			static_cast<System::Int32>(static_cast<System::Byte>(159)));;
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else
+		{
+			this->textBox1->Visible = true;
+			this->textBox2->Visible = true;
+			this->textBox3->Visible = true;
+			this->textBox4->Visible = true;
+			this->textBox5->Visible = true;
+			this->textBox6->Visible = true;
+			this->textBox7->Visible = true;
+			this->textBox8->Visible = true;
+			this->label1->Visible = true;
+			this->label9->Visible = true;
+			this->label3->Visible = true;
+			this->label4->Visible = true;
+			this->label5->Visible = true;
+			this->label6->Visible = true;
+			this->label7->Visible = true;
+			this->label8->Visible = true;
+
+			int max = 0;
+			for (int i = 0; i < src.rows; i++)
+			{
+				for (int j = 0; j < src.cols; j++)
+				{
+					if (src.at<uchar>(i, j) > max)
+					{
+						max = src.at<uchar>(i, j);
+					}
+				}
+			}
+			int min = 255;
+			for (int i = 0; i < src.rows; i++)
+				for (int j = 0; j < src.cols; j++)
+					if (src.at<uchar>(i, j) < min)
+						min = src.at<uchar>(i, j);
+
+			int sum = 0;
+			for (int i = 0; i < src.rows; i++)
+				for (int j = 0; j < src.cols; j++)
+					sum = sum + src.at<uchar>(i, j);
+			int avg = sum / src.total();
+
+
+			//Showing Values on TextBoxes
+			textBox1->Text = System::Convert::ToString(avg);
+			textBox2->Text = System::Convert::ToString(max);
+			textBox3->Text = System::Convert::ToString(min);
+			textBox4->Text = System::Convert::ToString(src.rows);
+			textBox5->Text = System::Convert::ToString(src.cols);
+			textBox6->Text = System::Convert::ToString(src.total());
+			textBox7->Text = System::Convert::ToString(src.channels());
+			textBox8->Text = System::Convert::ToString(src.depth()); //return a number from 0 to 6 
+
+			//imwrite("x.jpg", src);
+			//pictureBox1->ImageLocation = "x.jpg";
+			//ofd->FileName = pictureBox1->ImageLocation;
+		}
+	}
 
 
 
