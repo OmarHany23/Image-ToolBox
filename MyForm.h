@@ -5911,6 +5911,83 @@ namespace ToolBox {
 		src = blind;
 		trackBar1->Value = 3;
 	}
+
+    		   //Pyramidal Filter
+	private: System::Void pyramidalFilter_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->button13->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(100)), static_cast<System::Int32>(static_cast<System::Byte>(127)),
+			static_cast<System::Int32>(static_cast<System::Byte>(226)));;
+		this->button13->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->button13->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(100)), static_cast<System::Int32>(static_cast<System::Byte>(127)),
+			static_cast<System::Int32>(static_cast<System::Byte>(226)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() != 1)
+		{
+			MessageBox::Show("Please Convert image to the gray scale first ^_^");
+		}
+		else
+		{
+			hideUnwanted();
+			this->label16->Visible = true;
+			this->trackBar2->Visible = true;
+			this->button16->Visible = true;
+		}
+	}
+	private: System::Void pyramidal_Scroll(System::Object^ sender, System::EventArgs^ e) {
+		blind = src.clone();
+
+		trackBar2->Maximum = 15;
+		trackBar2->Minimum = 3;
+
+		Mat  filter;
+		int count = 0;
+
+		Mat Kernel = (Mat_<float>(trackBar2->Value, trackBar2->Value));
+		// 1, 2, 3, 2, 1, 2, 4, 6, 4, 2, 3, 6, 9, 6, 3, 2, 4, 6, 4, 2, 1, 2, 3, 2, 1
+		for (int i = 0; i < trackBar2->Value; i++) {
+			for (int j = 0; j < trackBar2->Value; j++) {
+				if ((i <= (trackBar2->Value - 1) / 2) && ((j <= (trackBar2->Value - 1) / 2))) {
+					if (i == 0 || j == 0) {
+						Kernel.at<float>(i, j) = i + j + 1;
+						count += Kernel.at<float>(i, j);
+					}
+					else {
+						Kernel.at<float>(i, j) = Kernel.at<float>(i, 0) + Kernel.at<float>(i, j - 1);
+						count += Kernel.at<float>(i, j);
+					}
+				}
+				else if (i <= (trackBar2->Value - 1) / 2) {
+					Kernel.at<float>(i, j) = Kernel.at<float>(i, j - 1) - Kernel.at<float>(i, 0);
+					count += Kernel.at<float>(i, j);
+				}
+				else {
+					Kernel.at<float>(i, j) = Kernel.at<float>(i - 1, j) - Kernel.at<float>(0, j);
+					count += Kernel.at<float>(i, j);
+				}
+				//cout << Kernel.at<float>(i, j) << "\t";
+			}
+			//cout << "\n";
+		}
+		Kernel /= count;
+		filter2D(src, filter, CV_8UC1, Kernel);
+
+		imwrite("filter.jpg", filter);
+		pictureBox1->ImageLocation = "filter.jpg";
+
+		blind = filter;
+	}
+	private: System::Void cnfrmpyramidal_Click(System::Object^ sender, System::EventArgs^ e) {
+		src = blind;
+		trackBar2->Value = 3;
+	}
     
     }
 }
