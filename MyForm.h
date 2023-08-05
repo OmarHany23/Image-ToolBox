@@ -4399,7 +4399,16 @@ namespace ToolBox {
 			this->LPF->Visible = false;
 
 		}
-        
+
+
+        //String matching 
+    void MarshalString(System::String^ s, std::string& os) {
+        //set system string and std string to be the same string
+        using namespace Runtime::InteropServices;
+        const char* chars = (const char*)(Marshal::StringToHGlobalAnsi(s)).ToPointer();
+        os = chars;
+        Marshal::FreeHGlobal(IntPtr((void*)chars));
+    }
 #pragma endregion
 
     
