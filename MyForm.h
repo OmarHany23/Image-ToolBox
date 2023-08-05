@@ -4786,6 +4786,67 @@ namespace ToolBox {
 		showSave();
 	}
 
-    
+    		   //Image Rotation Section
+	private: System::Void RotateRight_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Mat R = getRotationMatrix2D(Point2f(src.cols / 2, src.rows / 2), -90, 1);
+		//warpAffine(src, src, R, src.size());
+		//imwrite("x.jpg", src);
+		//pictureBox1->ImageLocation = "x.jpg";
+		//ofd->FileName = pictureBox1->ImageLocation;
+		pictureBox1->Image->RotateFlip(RotateFlipType::Rotate90FlipNone);
+		pictureBox1->Refresh();
+		showSave();
+	}
+	private: System::Void RotateLeft_Click(System::Object^ sender, System::EventArgs^ e) {
+		//Mat R = getRotationMatrix2D(Point2f(src.cols / 2, src.rows / 2), 90, 1);
+		//warpAffine(src, src, R, src.size());
+		//imwrite("x.jpg", src);
+		//pictureBox1->ImageLocation = "x.jpg";
+		//ofd->FileName = pictureBox1->ImageLocation;
+		pictureBox1->Image->RotateFlip(RotateFlipType::Rotate270FlipNone);
+		pictureBox1->Refresh();
+		showSave();
+	}
+	private: System::Void CustomRotation_Click(System::Object^ sender, System::EventArgs^ e) {
+		double a = 0;
+		a = System::Convert::ToDouble(RotationVar->Text);
+		Mat R = getRotationMatrix2D(Point2f(src.cols / 2, src.rows / 2), -a, 1);
+		warpAffine(src, src, R, src.size());
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+		if (a != 0)
+		{
+			showSave();
+		}
+	}
+	private: System::Void Rotation(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->button4->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(165)), static_cast<System::Int32>(static_cast<System::Byte>(49)),
+			static_cast<System::Int32>(static_cast<System::Byte>(65)));;
+		this->button4->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->button4->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(165)), static_cast<System::Int32>(static_cast<System::Byte>(49)),
+			static_cast<System::Int32>(static_cast<System::Byte>(65)));;
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else
+		{
+			hideUnwanted();
+			this->RotateRight->Visible = true;
+			this->RotateLeft->Visible = true;
+			this->CustomRotation->Visible = true;
+			this->RotationVar->Visible = true;
+			this->RotationLabel->Visible = true;
+			this->RotateLabel->Visible = true;
+		}
+	}
+
     }
 }
