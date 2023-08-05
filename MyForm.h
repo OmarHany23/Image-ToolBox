@@ -4613,5 +4613,131 @@ namespace ToolBox {
 		}
 	}
 
+    		   //Image Translation Section
+	private: System::Void Translation_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->Translation->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(162)), static_cast<System::Int32>(static_cast<System::Byte>(70)),
+			static_cast<System::Int32>(static_cast<System::Byte>(215)));;
+		this->Translation->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 13.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->Translation->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(162)), static_cast<System::Int32>(static_cast<System::Byte>(70)),
+			static_cast<System::Int32>(static_cast<System::Byte>(215)));;
+
+
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else
+		{
+			hideUnwanted();
+			this->btnUp->Visible = true;
+			this->UpRight->Visible = true;
+			this->Right->Visible = true;
+			this->DownRight->Visible = true;
+			this->btnDown->Visible = true;
+			this->DownLeft->Visible = true;
+			this->Left->Visible = true;
+			this->UpLeft->Visible = true;
+			this->label10->Visible = true;
+			this->label11->Visible = true;
+			this->TransX->Visible = true;
+			this->label12->Visible = true;
+			this->TransY->Visible = true;
+			this->CustomTranslation->Visible = true;
+			this->label13->Visible = true;
+		}
+	}
+	private: System::Void btnUp_Click(System::Object^ sender, System::EventArgs^ e) {
+		Mat TM = (Mat_<float>(2, 3) << 1, 0, 0, 0, 1, -10);
+		warpAffine(src, src, TM, src.size());
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+		showSave();
+	}
+	private: System::Void UpRight_Click(System::Object^ sender, System::EventArgs^ e) {
+		Mat TM = (Mat_<float>(2, 3) << 1, 0, 5, 0, 1, -5);
+		warpAffine(src, src, TM, src.size());
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+		showSave();
+	}
+	private: System::Void Right_Click(System::Object^ sender, System::EventArgs^ e) {
+		Mat TM = (Mat_<float>(2, 3) << 1, 0, 10, 0, 1, 0);
+		warpAffine(src, src, TM, src.size());
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+		showSave();
+	}
+	private: System::Void DownRight_Click(System::Object^ sender, System::EventArgs^ e) {
+		Mat TM = (Mat_<float>(2, 3) << 1, 0, 5, 0, 1, 5);
+		warpAffine(src, src, TM, src.size());
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+		showSave();
+	}
+	private: System::Void btnDown_Click(System::Object^ sender, System::EventArgs^ e) {
+		Mat TM = (Mat_<float>(2, 3) << 1, 0, 0, 0, 1, 10);
+		warpAffine(src, src, TM, src.size());
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+		showSave();
+	}
+	private: System::Void DownLeft_Click(System::Object^ sender, System::EventArgs^ e) {
+		Mat TM = (Mat_<float>(2, 3) << 1, 0, -5, 0, 1, 5);
+		warpAffine(src, src, TM, src.size());
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+		showSave();
+	}
+	private: System::Void Left_Click(System::Object^ sender, System::EventArgs^ e) {
+		Mat TM = (Mat_<float>(2, 3) << 1, 0, -10, 0, 1, 0);
+		warpAffine(src, src, TM, src.size());
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+		showSave();
+	}
+	private: System::Void UpLeft_Click(System::Object^ sender, System::EventArgs^ e) {
+		Mat TM = (Mat_<float>(2, 3) << 1, 0, -5, 0, 1, -5);
+		warpAffine(src, src, TM, src.size());
+		imwrite("x.jpg", src);
+		pictureBox1->ImageLocation = "x.jpg";
+		ofd->FileName = pictureBox1->ImageLocation;
+		showSave();
+	}
+	private: System::Void CustomTranslation_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else
+		{
+			double tx = 0;
+			tx = System::Convert::ToDouble(TransX->Text);
+			double ty = 0;
+			ty = System::Convert::ToDouble(TransY->Text);
+
+			Mat TM = (Mat_<float>(2, 3) << 1, 0, tx, 0, 1, -ty);
+			warpAffine(src, src, TM, src.size());
+			imwrite("x.jpg", src);
+			pictureBox1->ImageLocation = "x.jpg";
+			ofd->FileName = pictureBox1->ImageLocation;
+			if (tx != 0 || ty != 0)
+			{
+				showSave();
+			}
+		}
+	}
+    
     }
 }
