@@ -6971,7 +6971,38 @@ namespace ToolBox {
 			Savee();
 		}
 	}
-    
+
+    	private: System::Void RGB2Gray2_Click(System::Object^ sender, System::EventArgs^ e) {
+		//coloring
+		hideButtonColor();
+		this->RGB2Gray2->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(27)), static_cast<System::Int32>(static_cast<System::Byte>(104)),
+			static_cast<System::Int32>(static_cast<System::Byte>(117)));;
+		this->RGB2Gray2->Font = (gcnew System::Drawing::Font(L"Comic Sans MS", 12.0F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		this->RGB2Gray2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(0)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+			static_cast<System::Int32>(static_cast<System::Byte>(0)));;
+		this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(27)), static_cast<System::Int32>(static_cast<System::Byte>(104)),
+			static_cast<System::Int32>(static_cast<System::Byte>(117)));;
+
+		hideUnwanted();
+		if (src.empty())
+		{
+			MessageBox::Show("Please enter an image");
+		}
+		else if (src.channels() == 1)
+		{
+			MessageBox::Show("Picture is already Gray");
+		}
+		else
+		{
+			cvtColor(src, src, COLOR_BGR2GRAY);
+			imwrite("x.jpg", src);
+			pictureBox1->ImageLocation = "x.jpg";
+			ofd->FileName = pictureBox1->ImageLocation;
+			showSave();
+		}
+	}
+
 
     }
 }
