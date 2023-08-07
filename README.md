@@ -2,7 +2,7 @@
 
 ## To run the Project
 ### Downlaod Visual Studio
-[visual studio 2019 community free download](https://visualstudio.microsoft.com/downloads/)
+[visual studio community free download](https://visualstudio.microsoft.com/downloads/)
 ### Install C++/CLI from individual components (14.29 is used)
 
 ![cli](/documentation/images/cli.png)
